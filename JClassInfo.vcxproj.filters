@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="dist">
+      <UniqueIdentifier>{cc7163f5-886f-421c-988c-17e2516d3349}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="plugin.cpp" />
+    <ClCompile Include="panel.cpp" />
+    <ClCompile Include="jclass.cpp" />
+    <ClCompile Include="jtformat.cpp" />
+    <ClCompile Include="settings.cpp" />
+    <ClCompile Include="jdecompiler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h" />
+    <ClInclude Include="panel.h" />
+    <ClInclude Include="jclass.h" />
+    <ClInclude Include="jtformat.h" />
+    <ClInclude Include="settings.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="jdecompiler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="plugin.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="plugin.def" />
+    <None Include="dist\ChangeLog">
+      <Filter>dist</Filter>
+    </None>
+    <None Include="dist\readme_en.txt">
+      <Filter>dist</Filter>
+    </None>
+    <None Include="dist\readme_ru.txt">
+      <Filter>dist</Filter>
+    </None>
+  </ItemGroup>
+</Project>
