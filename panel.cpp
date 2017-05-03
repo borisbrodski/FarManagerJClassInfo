@@ -57,8 +57,8 @@ void panel::get_panel_info(OpenPanelInfo& info)
 	static KeyBarLabel kbl[] = {
 		{ { VK_F3, 0 }, L"JAD", L"JAD" },
 		{ { VK_F4, 0 }, L"Fernfl", L"Fernflower" },
-		{ { VK_F5, 0 }, L"Javap", L"Javap" },
-		{ { VK_F6, 0 }, L"", L"" },
+		{ { VK_F5, 0 }, L"CFR", L"CFR" },
+		{ { VK_F6, 0 }, L"Javap", L"Javap" },
 		{ { VK_F7, 0 }, L"", L"" },
 		{ { VK_F8, 0 }, L"", L"" },
 		{ { VK_F1, SHIFT_PRESSED }, L"", L"" },
@@ -171,13 +171,18 @@ void panel::free_panel_list(PluginPanelItem* items, const size_t items_count)
 
 bool panel::handle_keyboard(const KEY_EVENT_RECORD& key_event)
 {
-	if (key_event.dwControlKeyState == 0 && (key_event.wVirtualKeyCode == VK_F3 || key_event.wVirtualKeyCode == VK_F4 || key_event.wVirtualKeyCode == VK_F5)) {
+	if (key_event.dwControlKeyState == 0 && (
+				key_event.wVirtualKeyCode == VK_F3 ||
+				key_event.wVirtualKeyCode == VK_F4 ||
+				key_event.wVirtualKeyCode == VK_F5 ||
+				key_event.wVirtualKeyCode == VK_F6)) {
 		jdecompiler jd;
 		jdecompiler::decompiler mode = jdecompiler::jd_jad;
 		switch (key_event.wVirtualKeyCode) {
 			case VK_F3: mode = jdecompiler::jd_jad; break;
 			case VK_F4: mode = jdecompiler::jd_fernflower; break;
-			case VK_F5: mode = jdecompiler::jd_javap; break;
+			case VK_F5: mode = jdecompiler::jd_cfr; break;
+			case VK_F6: mode = jdecompiler::jd_javap; break;
 		}
 
 		if (jd.decompile(_file_name.c_str(), mode)) {

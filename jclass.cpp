@@ -19,6 +19,9 @@
 
 #include "jclass.h"
 
+// #define LOG(a) {FILE * f = fopen("c:\\tmp\\log.txt", "a");fprintf(f,a "\n");fclose(f);}
+// #define LOG1(a,p1) {FILE * f = fopen("c:\\tmp\\log.txt", "a");fprintf(f,a "\n",p1);fclose(f);}
+// #define LOG2(a,p1,p2) {FILE * f = fopen("c:\\tmp\\log.txt", "a");fprintf(f,a "\n",p1,p2);fclose(f);}
 
 //! Java class file file header
 #define JCLASS_HEADER 0xcafebabe
@@ -155,8 +158,12 @@ void jclass::read_constant_pool()
 				break;
 			case CONSTANT_NameAndType:			read(sizeof(const_pool_nameandtype)); break;
 			case CONSTANT_Utf8:					read(read_num<uint16_t>()); break;
-			default:
+			case CONSTANT_MethodHandle:         read(sizeof(const_pool_method_handle)); break;
+			case CONSTANT_MethodType:           read(sizeof(const_pool_method_type)); break;
+			case CONSTANT_InvokeDynamic:        read(sizeof(const_pool_invoke_dynamic)); break;
+			default: {
 				throw exception();
+			}
 		}
 	}
 }
@@ -249,8 +256,9 @@ void jclass::get_member_descr(const jmember_type type, vector<jmember>& members)
 
 const unsigned char* jclass::read(const size_t len)
 {
-	if (_data_pos + len >= _data_buff.size())
+	if (_data_pos + len >= _data_buff.size()) {
 		throw exception();
+	}
 	const unsigned char* data = &_data_buff[_data_pos];
 	_data_pos += len;
 	return data;

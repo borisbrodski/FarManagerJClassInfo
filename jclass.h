@@ -21,6 +21,7 @@
 
 #include "common.h"
 
+#pragma pack(push,1)
 
 class jclass
 {
@@ -155,7 +156,10 @@ private:
 		CONSTANT_Long = 5,
 		CONSTANT_Double = 6,
 		CONSTANT_NameAndType = 12,
-		CONSTANT_Utf8 = 1
+		CONSTANT_Utf8 = 1,
+		CONSTANT_MethodHandle = 15,
+		CONSTANT_MethodType = 16,
+		CONSTANT_InvokeDynamic = 18
 	};
 
 	//! Method description
@@ -219,6 +223,23 @@ private:
 		char bytes;
 	};
 
+	//! Constant pool item description
+	struct const_pool_method_handle {
+		unsigned char reference_kind;
+		uint16_t reference_index;
+	};
+
+	//! Constant pool item description
+	struct const_pool_method_type {
+		uint16_t descriptor_index;
+	};
+
+	//! Constant pool item description
+	struct const_pool_invoke_dynamic {
+		uint16_t bootstrap_method_attr_index;
+		uint16_t name_and_type_index;
+	};
+
 	//! Constant pool description
 	struct j_const_pool {
 		j_const_pool() : type(CONSTANT_Phantom), data(NULL) {}
@@ -236,6 +257,9 @@ private:
 			const const_pool_double* cp_double;
 			const const_pool_nameandtype* cp_nameandtype;
 			const const_pool_utf8* cp_utf8;
+			const const_pool_method_handle* cp_method_handle;
+			const const_pool_method_type* cp_method_type;
+			const const_pool_invoke_dynamic* cp_invoke_dynamic;
 		};
 	};
 
@@ -251,3 +275,5 @@ private:
 	map<uint16_t, j_method> _methods;	///< Class methods description
 	vector<j_const_pool> _const_pool;	///< Constant pool description
 };
+
+#pragma pack(pop)

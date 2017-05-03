@@ -2,7 +2,7 @@ Plug-in "JClassInfo" for Far Manager 3.0
 ****************************************
 
 Java class file viewer and decompilator.
-Decompilation is performed by Fernflower (F4), JAD (F3) or Javap (F5).
+Decompilation is performed by Fernflower (F4), JAD (F3), CFR (F4) or Javap (F6).
 
 Install:
   Unpack the archive to the Far plugins directory (...Far\Plugins).

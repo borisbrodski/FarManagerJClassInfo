@@ -46,6 +46,7 @@ bool jdecompiler::decompile(const wchar_t* file_name, const decompiler jd)
 	switch (jd) {
 		case jd_jad: rc = decompile_jad(file_name); break;
 		case jd_fernflower: rc = decompile_fernflower(file_name); break;
+		case jd_cfr: rc = decompile_cfr(file_name); break;
 		case jd_javap: rc = decompile_javap(file_name); break;
 	}
 
@@ -61,6 +62,7 @@ bool jdecompiler::decompile(const wchar_t* file_name, const decompiler jd)
 		switch (jd) {
 			case jd_jad: err_msg += L"JAD"; break;
 			case jd_fernflower: err_msg += L"Fernflower"; break;
+			case jd_cfr: err_msg += L"CFR"; break;
 			case jd_javap: err_msg += L"javap"; break;
 		}
 		_PSI.Message(&_FPG, &_FPG, FMSG_ALLINONE | FMSG_WARNING | FMSG_MB_OK, nullptr, reinterpret_cast<const wchar_t* const*>(err_msg.c_str()), 0, 0);
@@ -149,6 +151,41 @@ bool jdecompiler::decompile_jad(const wchar_t* file_name)
 	return execute(decompiler_module.c_str(), decompiler_params.c_str());
 }
 
+
+bool jdecompiler::decompile_cfr(const wchar_t* file_name)
+{
+	assert(file_name && file_name[0]);
+
+	const wstring tmp_path = get_tmp_path();
+
+	wstring decompiler_params = L" -jar \"";
+	decompiler_params += module_path() + L"cfr_0_121.jar\" ";
+	decompiler_params += L"\"";
+	decompiler_params += file_name;
+	decompiler_params += L"\"";
+
+	_java_file_name = tmp_path + L'\\';
+	_java_file_name += _FSF.PointToName(file_name);
+	const size_t ext_pos = _java_file_name.rfind(L'.');
+	if (ext_pos != string::npos)
+		_java_file_name.erase(ext_pos + 1);
+	_java_file_name += L"java";
+
+	const wstring java_exe = _java_bin_path + L"java.exe";
+
+	SECURITY_ATTRIBUTES  sec;
+	ZeroMemory(&sec, sizeof(sec));
+	sec.nLength = sizeof(sec);
+	sec.bInheritHandle = TRUE;
+	HANDLE std_out_file = CreateFile(_java_file_name.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, &sec, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (std_out_file == INVALID_HANDLE_VALUE)
+		return false;
+
+	const bool rc = execute(java_exe.c_str(), decompiler_params.c_str(), std_out_file, 0);
+
+	CloseHandle(std_out_file);
+	return rc;
+}
 
 bool jdecompiler::decompile_fernflower(const wchar_t* file_name)
 {

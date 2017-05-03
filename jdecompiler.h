@@ -30,6 +30,7 @@ public:
 	enum decompiler {
 		jd_jad,
 		jd_fernflower,
+		jd_cfr,
 		jd_javap
 	};
 
@@ -61,6 +62,13 @@ private:
 	 * \return false if error
 	 */
 	bool decompile_jad(const wchar_t* file_name);
+
+	/**
+	 * Decompilation with CFR.
+	 * \param file_name java class file name
+	 * \return false if error
+	 */
+	bool decompile_cfr(const wchar_t* file_name);
 
 	/**
 	 * Decompilation with Fernflower.
