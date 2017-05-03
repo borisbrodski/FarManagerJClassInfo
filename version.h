@@ -21,12 +21,12 @@
 
 
 #define PLUGIN_VER_MAJOR	3
-#define PLUGIN_VER_MINOR	9
+#define PLUGIN_VER_MINOR	10
 #define PLUGIN_VER_BUILD	0
 #define PLUGIN_FAR_BUILD	FARMANAGERVERSION_BUILD
 
 #define PLUGIN_NAME			"Java class info"
-#define PLUGIN_AUTHOR		"Artem Senichev"
+#define PLUGIN_AUTHOR		"Artem Senichev (+BB)"
 #define PLUGIN_DESCR		"Java class file viewer and decompiler"
 #define PLUGIN_FILENAME		"JClassInfo.dll"
 

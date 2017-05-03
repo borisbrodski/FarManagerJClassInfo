@@ -156,7 +156,7 @@ void jclass::read_constant_pool()
 			case CONSTANT_NameAndType:			read(sizeof(const_pool_nameandtype)); break;
 			case CONSTANT_Utf8:					read(read_num<uint16_t>()); break;
 			default:
-				throw exception("Unknown constant pool tag");
+				throw exception();
 		}
 	}
 }
@@ -250,7 +250,7 @@ void jclass::get_member_descr(const jmember_type type, vector<jmember>& members)
 const unsigned char* jclass::read(const size_t len)
 {
 	if (_data_pos + len >= _data_buff.size())
-		throw exception("Incorrect class file format");
+		throw exception();
 	const unsigned char* data = &_data_buff[_data_pos];
 	_data_pos += len;
 	return data;

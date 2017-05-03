@@ -27,8 +27,8 @@ bool settings::add_to_panel_menu = false;
 wstring settings::cmd_prefix = L"jclassinfo";
 
 
-#define SAVE_SETTINGS(s, p) s.set(L#p, p);
-#define LOAD_SETTINGS(s, p) p = s.get(L#p, p);
+#define SAVE_SETTINGS(s, p) s.set(L ## #p, p);
+#define LOAD_SETTINGS(s, p) p = s.get(L ## #p, p);
 
 class settings_serializer
 {
@@ -75,7 +75,7 @@ public:
 	 * \param val value
 	 * \return false if error
 	 */
-	template<> bool set(const wchar_t* name, const wstring& val) const
+	bool set(const wchar_t* name, const wstring& val) const
 	{
 		assert(name && *name);
 
@@ -94,7 +94,7 @@ public:
 	 * \param val value
 	 * \return false if error
 	 */
-	template<> bool set(const wchar_t* name, const bool& val) const
+	bool set(const wchar_t* name, const bool& val) const
 	{
 		return set<unsigned char>(name, val ? 1 : 0);
 	}
@@ -123,7 +123,7 @@ public:
 	 * \param default_val default value
 	 * \return value
 	 */
-	template<> wstring get(const wchar_t* name, const wstring& default_val) const
+	wstring get(const wchar_t* name, const wstring& default_val) const
 	{
 		assert(name && *name);
 
@@ -141,7 +141,7 @@ public:
 	 * \param default_val default value
 	 * \return value
 	 */
-	template<> bool get(const wchar_t* name, const bool& default_val) const
+	bool get(const wchar_t* name, const bool& default_val) const
 	{
 		return get<unsigned char>(name, default_val ? 1 : 0) != 0;
 	}

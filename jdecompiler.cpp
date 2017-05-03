@@ -102,7 +102,8 @@ intptr_t jdecompiler::find_line(const jclass::jmember& member) const
 			regex_tmpl += "\\s*(=.*;|;)";
 		regex rx(regex_tmpl.c_str());
 		ifstream file_stream;
-		file_stream.open(_java_file_name, fstream::in);
+		string cjava_file_name(begin(_java_file_name), end(_java_file_name));
+		file_stream.open(cjava_file_name.c_str(), fstream::in);
 		if (file_stream.is_open()) {
 			int ln = 1;
 			while (line_num == 1 && !file_stream.eof()) {

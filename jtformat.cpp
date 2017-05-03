@@ -153,7 +153,7 @@ const wchar_t* jtformat::type_name(const wchar_t* token, wstring& name) const
 	if (*token == BTYPE_OBJ) {
 		const wchar_t* token_end = wcschr(token, L';');
 		if (!token_end)
-			throw exception("Incorrect type format: object without comma");
+			throw exception();
 		name.assign(++token, token_end);
 		if (_jo_view)
 			as_java_object(name);
@@ -165,7 +165,7 @@ const wchar_t* jtformat::type_name(const wchar_t* token, wstring& name) const
 		return ++token_end;
 	}
 
-	throw exception("Incorrect type format: unknown identifier");
+	throw exception();
 }
 
 

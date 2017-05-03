@@ -139,9 +139,9 @@ void panel::get_panel_list(PluginPanelItem** items, size_t& items_count)
 		wcscpy_s(const_cast<wchar_t*>(item.AlternateFileName), name_size, it->name.c_str());
 
 		wchar_t** custom_column_data = new wchar_t*[1];
-		const size_t сс_size = it->description.length() + 1;
-		custom_column_data[0] = new wchar_t[сс_size];
-		wcscpy_s(custom_column_data[0], сс_size, it->description.c_str());
+		const size_t cc_size = it->description.length() + 1;
+		custom_column_data[0] = new wchar_t[cc_size];
+		wcscpy_s(custom_column_data[0], cc_size, it->description.c_str());
 		item.CustomColumnData = custom_column_data;
 		item.CustomColumnNumber = 1;
 
