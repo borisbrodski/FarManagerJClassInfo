@@ -107,6 +107,13 @@ private:
 	wstring get_tmp_path() const;
 
 	/**
+	 * Find javac executable module path.
+	 * \param javac_bin_path javac executable path
+	 * \return false if error (javac interpreter not found)
+	 */
+	bool find_javac_bin(wstring& javac_bin_path) const;
+
+	/**
 	 * Find java executable module path.
 	 * \param java_bin_path java executable path
 	 * \return false if error (java interpreter not found)
@@ -129,5 +136,6 @@ private:
 
 private:
 	wstring _java_bin_path;		///< Java interpreter bin directory path
+	wstring _javac_bin_path;		///< Java interpreter bin directory path
 	wstring _java_file_name;	///< Destination java source file
 };

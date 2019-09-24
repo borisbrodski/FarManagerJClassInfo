@@ -1,0 +1,16 @@
+In CMD:
+
+set PATH=%PATH%;d:\msys64\mingw64\bin
+mingw32-make.exe
+
+
+In MSYS:
+- Install Msys
+$ pacman -S mingw-w64-x86_64-gcc
+$ pacman -S mingw-w64-x86_64-make
+
+
+$ PATH=$PATH:/mingw64/bin/ /mingw64/bin/mingw32-make.exe
+
+Ignore ERROR:
+D:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: .rsrc merge failure: duplicate leaf: type: 10 (VERSION) name: 1 lang: 409

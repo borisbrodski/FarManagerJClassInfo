@@ -159,7 +159,7 @@ bool jdecompiler::decompile_cfr(const wchar_t* file_name)
 	const wstring tmp_path = get_tmp_path();
 
 	wstring decompiler_params = L" -jar \"";
-	decompiler_params += module_path() + L"cfr_0_121.jar\" ";
+	decompiler_params += module_path() + L"cfr.jar\" ";
 	decompiler_params += L"\"";
 	decompiler_params += file_name;
 	decompiler_params += L"\"";
@@ -217,6 +217,12 @@ bool jdecompiler::decompile_javap(const wchar_t* file_name)
 {
 	assert(file_name && file_name[0]);
 
+	if (_javac_bin_path.empty() && !find_javac_bin(_javac_bin_path)) {
+		const wchar_t* msg[] = { TEXT(PLUGIN_NAME), L"Unable to decompile class file: JDK not found" };
+		_PSI.Message(&_FPG, &_FPG, FMSG_WARNING | FMSG_MB_OK, nullptr, msg, sizeof(msg) / sizeof(msg[0]), 0);
+		return false;
+	}
+
 	wstring class_path = file_name;
 	const size_t cp_pos = class_path.rfind('\\');
 	if (cp_pos == string::npos)
@@ -238,7 +244,7 @@ bool jdecompiler::decompile_javap(const wchar_t* file_name)
 	decompiler_params += class_path + L"\" ";
 	decompiler_params += class_name;
 
-	const wstring javap_exe = _java_bin_path + L"javap.exe";
+	const wstring javap_exe = _javac_bin_path + L"javap.exe";
 
 	SECURITY_ATTRIBUTES  sec;
 	ZeroMemory(&sec, sizeof(sec));
@@ -314,6 +320,49 @@ wstring jdecompiler::get_tmp_path() const
 	return tmp_path;
 }
 
+
+bool jdecompiler::find_javac_bin(wstring& javac_bin_path) const
+{
+	const wchar_t* javac_exe = L"javac.exe";
+
+	if (execute(javac_exe, nullptr))
+		return true;
+
+	//Search in JAVA_HOME
+	wstring java_home(1024, 0);
+	java_home.resize(GetEnvironmentVariable(L"JAVA_HOME", &java_home[0], static_cast<DWORD>(java_home.size())));
+	if (!java_home.empty()) {
+		java_home += L"\\bin\\";
+		const wstring chk_path = java_home + L"javac.exe";
+		if (execute(chk_path.c_str(), nullptr)) {
+			javac_bin_path = java_home;
+			return true;
+		}
+	}
+
+	//Search in registry
+	const wchar_t* keys[] = {
+		L"SOFTWARE\\JavaSoft\\Java Development Kit\\1.8",
+		L"SOFTWARE\\JavaSoft\\Java Development Kit\\1.7",
+		L"SOFTWARE\\JavaSoft\\Java Development Kit\\1.6",
+ 		L"SOFTWARE\\JavaSoft\\Java Runtime Environment\\1.8",
+ 		L"SOFTWARE\\JavaSoft\\Java Runtime Environment\\1.7",
+		L"SOFTWARE\\JavaSoft\\Java Runtime Environment\\1.6"
+	};
+	for (size_t i = 0; i < sizeof(keys) / sizeof(keys[0]); ++i) {
+		wstring path = get_javahome_path(keys[i]);
+		if (!path.empty()) {
+			path += L"\\bin\\";
+			const wstring chk_path = path + L"javac.exe";
+			if (execute(chk_path.c_str(), nullptr)) {
+				javac_bin_path = path;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 bool jdecompiler::find_java_bin(wstring& java_bin_path) const
 {
